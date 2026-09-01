@@ -1,0 +1,112 @@
+<script>
+  // Page Navigation Logic
+  function showPage(pageId) {
+    // Hide all pages
+    const pages = document.querySelectorAll('.page-section');
+    pages.forEach(page => page.classList.remove('active-page'));
+    
+    // Show selected page
+    document.getElementById(pageId).classList.add('active-page');
+  }
+
+  // Submit Appointment
+  function submitBooking() {
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+
+    if(!name || !phone || !address){
+      alert("Please fill in your name, phone number, and address.");
+      return;
+    }
+
+    const msgBox = document.getElementById('bookingMessage');
+    msgBox.className = "info-msg";
+    msgBox.innerText = "Booking in progress, please wait...";
+    
+    google.script.run.withSuccessHandler(function(response) {
+      msgBox.className = "success-msg";
+      msgBox.innerText = response;
+      document.getElementById('name').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('address').value = '';
+      
+      setTimeout(() => { msgBox.innerText = ''; }, 5000);
+    }).bookAppointment(name, phone, address);
+  }
+
+  // Admin Login
+  function loginAdmin() {
+    const id = document.getElementById('adminId').value.trim();
+    const pass = document.getElementById('adminPassword').value;
+    const msgBox = document.getElementById('adminMessage');
+    
+    msgBox.className = "info-msg";
+    msgBox.innerText = "Checking credentials...";
+    
+    google.script.run.withSuccessHandler(function(response) {
+      if(response.error) {
+        msgBox.className = "error-msg";
+        msgBox.innerText = response.message;
+      } else {
+        msgBox.innerText = "";
+        document.getElementById('adminLoginSection').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        showData(response.data);
+      }
+    }).getAppointments(id, pass);
+  }
+
+  // Display Data in Table
+  function showData(data) {
+    if(data.length <= 1) {
+      document.getElementById('tableContainer').innerHTML = "<p>No appointments found.</p>";
+      return;
+    }
+    
+    let table = "<table><tr><th>Name</th><th>Phone</th><th>Address</th><th>Date & Time</th><th>Status</th><th>Action</th></tr>";
+    
+    for(let i = data.length - 1; i >= 1; i--) {
+      let status = data[i][4] || "Pending";
+      let timestamp = new Date(data[i][3]);
+      let formattedDate = timestamp.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+      
+      let statusClass = "status-pending";
+      if(status === "Approved") statusClass = "status-approved";
+      if(status === "Rejected") statusClass = "status-rejected";
+
+      let actionButtons = `
+        <button class="btn-approve" onclick="changeStatus(${i}, 'Approved')">Approve</button>
+        <button class="btn-reject" onclick="changeStatus(${i}, 'Rejected')">Reject</button>
+      `;
+
+      table += `<tr>
+        <td>${data[i][0]}</td>
+        <td>${data[i][1]}</td>
+        <td>${data[i][2]}</td>
+        <td>${formattedDate}</td>
+        <td><span class="${statusClass}">${status}</span></td>
+        <td style="min-width: 90px;">${actionButtons}</td>
+      </tr>`;
+    }
+    table += "</table>";
+    document.getElementById('tableContainer').innerHTML = table;
+  }
+
+  // Change Status
+  function changeStatus(index, newStatus) {
+    document.getElementById('tableContainer').innerHTML = "<p class='info-msg'>Updating status, please wait...</p>";
+    google.script.run.withSuccessHandler(function(response) {
+      loginAdmin(); 
+    }).updateStatus(index, newStatus);
+  }
+
+  // Logout Admin
+  function logoutAdmin() {
+    document.getElementById('adminLoginSection').style.display = 'block';
+    document.getElementById('adminDashboard').style.display = 'none';
+    document.getElementById('adminId').value = '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('tableContainer').innerHTML = "Loading...";
+  }
+</script>
