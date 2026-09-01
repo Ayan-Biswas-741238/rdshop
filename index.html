@@ -10,7 +10,6 @@
 </head>
 <body>
 
-  <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="brand-logo">RD <span>Shop</span></div>
     <button class="burger-menu" id="burgerBtn" onclick="toggleMenu()">&#9776;</button>
@@ -26,7 +25,6 @@
 
   <div class="main-content">
     
-    <!-- HOME PAGE -->
     <div id="homePage" class="page-section active-page">
       <div class="hero-section">
         <div class="hero-content">
@@ -59,16 +57,19 @@
       </div>
     </div>
 
-    <!-- APPOINTMENT PAGE -->
     <div id="appointmentPage" class="page-section">
       <div class="card-section">
-        <div class="text-center" style="margin-bottom:15px;">
+        <div class="section-header-flex">
+          <h2 class="section-title" style="margin:0;">Book a New Appointment</h2>
+          <button class="btn-refresh" onclick="refreshPage('appointmentPage')" title="Reset Form">🔄 Refresh</button>
+        </div>
+
+        <div class="text-center" style="margin: 15px 0;">
           <div class="status-shortcut-btn" onclick="showPage('statusPage')">
             🔍 Already Booked? Check Your Status ➔
           </div>
         </div>
 
-        <h2 class="section-title">Book a New Appointment</h2>
         <div class="form-group">
           <input type="text" id="name" placeholder="Your Full Name" required>
           <input type="text" id="phone" placeholder="Phone Number" required>
@@ -90,11 +91,14 @@
       </div>
     </div>
 
-    <!-- CAREER PAGE -->
     <div id="careerPage" class="page-section">
       <div class="card-section">
-        <h2 class="section-title">Career - Apply for a Job</h2>
+        <div class="section-header-flex">
+          <h2 class="section-title" style="margin:0;">Career - Apply for a Job</h2>
+          <button class="btn-refresh" onclick="refreshPage('careerPage')" title="Reset Form">🔄 Refresh</button>
+        </div>
         <p class="sub-text">Join the RD Bathroom team! Fill out the form below to apply.</p>
+        
         <div class="form-group">
           <input type="text" id="jobName" placeholder="Your Full Name" required>
           <input type="text" id="jobPhone" placeholder="Phone Number" required>
@@ -115,10 +119,12 @@
       </div>
     </div>
 
-    <!-- CHECK STATUS PAGE -->
     <div id="statusPage" class="page-section">
       <div class="card-section text-center">
-        <h2 class="section-title">Check Appointment Status</h2>
+        <div class="section-header-flex">
+          <h2 class="section-title" style="margin:0;">Check Appointment Status</h2>
+          <button class="btn-refresh" onclick="refreshPage('statusPage')" title="Reset Page">🔄 Refresh</button>
+        </div>
         <p class="sub-text">Enter your Reference ID (e.g. S202610001)</p>
         
         <div class="form-group" style="max-width:450px; margin: 20px auto 0;">
@@ -129,10 +135,12 @@
       </div>
     </div>
 
-    <!-- CONTACT PAGE -->
     <div id="contactPage" class="page-section">
       <div class="card-section text-center">
-        <h2 class="section-title">Contact Info</h2>
+        <div class="section-header-flex">
+          <h2 class="section-title" style="margin:0;">Contact Info</h2>
+          <button class="btn-refresh" onclick="refreshPage('contactPage')" title="Reset Page">🔄 Refresh</button>
+        </div>
         <div class="contact-grid">
           <div class="contact-card"><div class="icon">📍</div><h4>Address</h4><p>গ্রাম: শ্রীধরপুর, ঘোলা<br>রানাঘাট, নদীয়া</p></div>
           <div class="contact-card"><div class="icon">📞</div><h4>Phone</h4><p><strong>Mobile:</strong> 9002785595</p><p><strong>Care:</strong> 1800-1200-300</p></div>
@@ -142,7 +150,6 @@
       </div>
     </div>
 
-    <!-- ADMIN PAGE -->
     <div id="adminPage" class="page-section">
       <div class="card-section" id="adminLoginSection">
         <h2 class="section-title">Admin Login</h2>
@@ -157,16 +164,17 @@
       <div class="card-section" id="adminDashboard" style="display:none; max-width: 100%;">
         <div class="header-flex">
           <h2 class="section-title" style="margin:0; border:none;">Admin Dashboard</h2>
-          <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button onclick="refreshAdminData()" class="btn-refresh" id="adminRefreshBtn" title="Real-time Live Sync">🔄 Refresh Data</button>
+            <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
+          </div>
         </div>
         
-        <!-- Admin Tabs -->
         <div class="admin-tabs">
           <button class="admin-tab-btn active-tab" id="tabAppBtn" onclick="switchAdminTab('appointments')">Appointments</button>
           <button class="admin-tab-btn" id="tabJobBtn" onclick="switchAdminTab('jobs')">Job Applications</button>
         </div>
 
-        <!-- Tables -->
         <div id="appointmentTableContainer" class="table-responsive">Loading...</div>
         <div id="jobTableContainer" class="table-responsive" style="display:none;">Loading...</div>
       </div>
