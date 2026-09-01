@@ -1,27 +1,18 @@
-// APNAR APPS SCRIPT WEB APP URL INTEGRATE KORA HOYECHE
+// Apnar Apps Script URL ekhan theke API Call hobe
 const API_URL = "https://script.google.com/macros/s/AKfycbzcf1JgISHCR4nMZOSLFcQNxSldeDFw-f_WBS4eXpmkiy9dHnp7j-lhVE9Oa0k0JgbY/exec";
 
-// Toggle Mobile Burger Menu
 function toggleMenu() {
-  const navLinks = document.getElementById('navLinks');
-  navLinks.classList.toggle('show');
+  document.getElementById('navLinks').classList.toggle('show');
 }
 
-// Page Navigation Logic
 function showPage(pageId) {
-  const pages = document.querySelectorAll('.page-section');
-  pages.forEach(page => page.classList.remove('active-page'));
-  
+  document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active-page'));
   document.getElementById(pageId).classList.add('active-page');
-
-  // Close mobile burger menu after clicking a link
+  
   const navLinks = document.getElementById('navLinks');
-  if (navLinks.classList.contains('show')) {
-    navLinks.classList.remove('show');
-  }
+  if (navLinks.classList.contains('show')) navLinks.classList.remove('show');
 }
 
-// API Fetch Helper
 function callAPI(payload, successCallback) {
   fetch(API_URL, {
     method: 'POST',
@@ -32,11 +23,10 @@ function callAPI(payload, successCallback) {
   .then(data => successCallback(data))
   .catch(err => {
     console.error("API Error:", err);
-    alert("Connection error! Please check your network or API link.");
+    alert("Connection error! Please check your network.");
   });
 }
 
-// Submit Appointment
 function submitBooking() {
   const name = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
@@ -58,16 +48,11 @@ function submitBooking() {
       document.getElementById('name').value = '';
       document.getElementById('phone').value = '';
       document.getElementById('address').value = '';
-      
       setTimeout(() => { msgBox.innerText = ''; }, 5000);
-    } else {
-      msgBox.className = "msg-box error-text";
-      msgBox.innerText = res.message;
     }
   });
 }
 
-// Admin Login
 function loginAdmin() {
   const id = document.getElementById('adminId').value.trim();
   const pass = document.getElementById('adminPassword').value;
@@ -89,7 +74,6 @@ function loginAdmin() {
   });
 }
 
-// Display Admin Data
 function showData(data) {
   if(data.length <= 1) {
     document.getElementById('tableContainer').innerHTML = "<p>No appointments found.</p>";
@@ -100,9 +84,7 @@ function showData(data) {
   
   for(let i = data.length - 1; i >= 1; i--) {
     let status = data[i][4] || "Pending";
-    let statusClass = "status-pending";
-    if(status === "Approved") statusClass = "status-approved";
-    if(status === "Rejected") statusClass = "status-rejected";
+    let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
 
     let actionButtons = `
       <button class="btn-approve" onclick="changeStatus(${i}, 'Approved')">Approve</button>
@@ -122,18 +104,13 @@ function showData(data) {
   document.getElementById('tableContainer').innerHTML = table;
 }
 
-// Change Appointment Status
 function changeStatus(index, newStatus) {
   document.getElementById('tableContainer').innerHTML = "<p class='msg-box info-text'>Updating status, please wait...</p>";
-  
   callAPI({ action: 'update', rowIndex: index, status: newStatus }, function(res) {
-    if(res.success) {
-      showData(res.data);
-    }
+    if(res.success) showData(res.data);
   });
 }
 
-// Logout Admin
 function logoutAdmin() {
   document.getElementById('adminLoginSection').style.display = 'block';
   document.getElementById('adminDashboard').style.display = 'none';
