@@ -1,8 +1,6 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbzDxCvcyMIDnTjhoyqiArnRmiNLo0Jv6Vm6Lo8Rl-y_Pc7Ej3HiCtnvvegw4VDHme_f/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyDB7Rlmk5LvTtI35DKP4K6NGGHAP3wEO74B2uVj--RwwumMEICy5DnU9iG8ajEm1kL/exec";
 
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('show');
-}
+function toggleMenu() { document.getElementById('navLinks').classList.toggle('show'); }
 
 function showPage(pageId) {
   document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active-page'));
@@ -37,7 +35,7 @@ function callAPI(payload, successCallback, errorCallback) {
   });
 }
 
-// 1. SUBMIT BOOKING (Updated to include email)
+// ================= 1. APPOINTMENT BOOKING =================
 function submitBooking() {
   const name = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
@@ -46,8 +44,7 @@ function submitBooking() {
   const service = document.getElementById('service').value;
 
   if(!name || !phone || !email || !address){
-    alert("Please fill in your name, phone, email, and address.");
-    return;
+    alert("Please fill in all details."); return;
   }
 
   const resultBox = document.getElementById('bookingResult');
@@ -61,19 +58,50 @@ function submitBooking() {
       resultBox.innerHTML = `
         <h3 style="color:#27ae60;">🎉 ${res.message}</h3>
         <p style="margin-top:10px;">Your Reference ID has been sent to your email.</p>
-        <div class="ref-badge">${res.refId}</div>
-        <p style="font-size:13px; color:#666;">Note down this Reference ID carefully.</p>
+        <div class="ref-badge" style="color:#27ae60;">${res.refId}</div>
       `;
       document.getElementById('name').value = '';
       document.getElementById('phone').value = '';
       document.getElementById('email').value = '';
       document.getElementById('address').value = '';
     }
-  }, function() {
-    setButtonState('bookBtn', false, 'Book Appointment');
-  });
+  }, function() { setButtonState('bookBtn', false, 'Book Appointment'); });
 }
 
+// ================= 2. CAREER JOB APPLICATION =================
+function submitJobApplication() {
+  const name = document.getElementById('jobName').value.trim();
+  const phone = document.getElementById('jobPhone').value.trim();
+  const email = document.getElementById('jobEmail').value.trim();
+  const position = document.getElementById('jobPosition').value;
+  const experience = document.getElementById('jobExperience').value.trim();
+
+  if(!name || !phone || !email || !experience){
+    alert("Please fill in all details."); return;
+  }
+
+  const resultBox = document.getElementById('jobResult');
+  resultBox.style.display = 'none';
+  setButtonState('jobBtn', true, 'Submit Application');
+  
+  callAPI({ action: 'applyJob', name, phone, email, position, experience }, function(res) {
+    setButtonState('jobBtn', false, 'Submit Application');
+    if(res.success) {
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = `
+        <h3 style="color:#2980b9;">🎉 ${res.message}</h3>
+        <p style="margin-top:10px;">Your Job Application ID has been sent to your email.</p>
+        <div class="ref-badge" style="color:#2980b9;">${res.appId}</div>
+      `;
+      document.getElementById('jobName').value = '';
+      document.getElementById('jobPhone').value = '';
+      document.getElementById('jobEmail').value = '';
+      document.getElementById('jobExperience').value = '';
+    }
+  }, function() { setButtonState('jobBtn', false, 'Submit Application'); });
+}
+
+// Date Format Helpers
 function formatDate(dateString) {
   if (!dateString || dateString === "Not Scheduled Yet") return "Not Scheduled Yet";
   let d = new Date(dateString);
@@ -83,24 +111,17 @@ function formatDate(dateString) {
   let year = d.getFullYear();
   return `${day}/${month}/${year}`;
 }
-
-function formatDateForInput(dateString) {
-  if (!dateString || dateString === "Not Scheduled Yet") return "";
-  let d = new Date(dateString);
-  if (isNaN(d.getTime())) return ""; 
-  let day = String(d.getDate()).padStart(2, '0');
-  let month = String(d.getMonth() + 1).padStart(2, '0');
-  let year = d.getFullYear();
-  return `${year}-${month}-${day}`;
+function formatForInput(dateStr) {
+  if(!dateStr || dateStr === "Not Scheduled Yet") return "";
+  let parts = dateStr.split("/");
+  if(parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  return "";
 }
 
-// 2. CHECK APPOINTMENT STATUS
+// ================= 3. CHECK STATUS =================
 function checkStatus() {
   const refId = document.getElementById('refIdInput').value.trim();
-  if(!refId) {
-    alert("Please enter a Reference ID!");
-    return;
-  }
+  if(!refId) { alert("Please enter Reference ID!"); return; }
 
   const statusCard = document.getElementById('statusResultCard');
   statusCard.style.display = 'none';
@@ -109,16 +130,14 @@ function checkStatus() {
   callAPI({ action: 'checkStatus', refId: refId }, function(res) {
     setButtonState('statusBtn', false, 'Check Status');
     statusCard.style.display = 'block';
-    
     if(res.success) {
       const item = res.data;
       let statusBadge = item.status === "Approved" ? "status-approved" : (item.status === "Rejected" ? "status-rejected" : "status-pending");
-      
       let displayDate = formatDate(item.visitingDate);
 
       statusCard.innerHTML = `
-        <h3 style="color:#2c3e50; margin-bottom:15px; text-align:center;">Appointment Details</h3>
-        <div class="status-row"><strong>Reference ID:</strong> <span>${item.refId}</span></div>
+        <h3 style="color:#2c3e50; margin-bottom:15px; text-align:center;">Details Found</h3>
+        <div class="status-row"><strong>Ref ID:</strong> <span>${item.refId}</span></div>
         <div class="status-row"><strong>Name:</strong> <span>${item.name}</span></div>
         <div class="status-row"><strong>Service:</strong> <span>${item.service}</span></div>
         <div class="status-row"><strong>Status:</strong> <span class="${statusBadge}">${item.status}</span></div>
@@ -127,12 +146,10 @@ function checkStatus() {
     } else {
       statusCard.innerHTML = `<p style="color:#e74c3c; text-align:center; font-weight:bold;">❌ ${res.message}</p>`;
     }
-  }, function() {
-    setButtonState('statusBtn', false, 'Check Status');
-  });
+  }, function() { setButtonState('statusBtn', false, 'Check Status'); });
 }
 
-// 3. ADMIN LOGIN
+// ================= 4. ADMIN PANEL =================
 function loginAdmin() {
   const id = document.getElementById('adminId').value.trim();
   const pass = document.getElementById('adminPassword').value;
@@ -147,95 +164,108 @@ function loginAdmin() {
       msgBox.innerText = "";
       document.getElementById('adminLoginSection').style.display = 'none';
       document.getElementById('adminDashboard').style.display = 'block';
-      showData(res.data);
+      renderAdminTables(res.appointmentData, res.jobData);
     } else {
-      msgBox.className = "msg-box error-text";
-      msgBox.innerText = res.message;
+      msgBox.className = "msg-box error-text"; msgBox.innerText = res.message;
     }
-  }, function() {
-    setButtonState('loginBtn', false, 'Login');
-  });
+  }, function() { setButtonState('loginBtn', false, 'Login'); });
 }
 
-function formatForInput(dateStr) {
-  if(!dateStr || dateStr === "Not Scheduled Yet") return "";
-  let parts = dateStr.split("/");
-  if(parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-  return "";
-}
+// Switch Tabs
+function switchAdminTab(tabName) {
+  document.getElementById('tabAppBtn').classList.remove('active-tab');
+  document.getElementById('tabJobBtn').classList.remove('active-tab');
+  document.getElementById('appointmentTableContainer').style.display = 'none';
+  document.getElementById('jobTableContainer').style.display = 'none';
 
-// 4. DISPLAY ADMIN DATA TABLE (Updated with shifted columns)
-function showData(data) {
-  if(data.length <= 1) {
-    document.getElementById('tableContainer').innerHTML = "<p>No appointments found.</p>";
-    return;
+  if (tabName === 'appointments') {
+    document.getElementById('tabAppBtn').classList.add('active-tab');
+    document.getElementById('appointmentTableContainer').style.display = 'block';
+  } else {
+    document.getElementById('tabJobBtn').classList.add('active-tab');
+    document.getElementById('jobTableContainer').style.display = 'block';
   }
-  
-  let table = "<table><tr><th>Ref ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Status</th><th>Visiting Date</th><th>Action</th></tr>";
-  
-  for(let i = data.length - 1; i >= 1; i--) {
-    let refId = data[i][0] || "N/A";
-    let name = data[i][1] || "N/A";
-    let phone = data[i][2] || "N/A";
-    let email = data[i][4] || "N/A";     // Column E (Index 4)
-    let service = data[i][5] || "N/A";   // Column F (Index 5)
-    let status = data[i][7] || "Pending"; // Column H (Index 7)
-    let rawDate = data[i][8] || "";       // Column I (Index 8)
-    
-    let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
-
-    let displayDate = formatDate(rawDate);
-    let inputDateValue = formatForInput(rawDate); // Use the simple formatForInput for table
-
-    let actionButtons = `
-      <div style="margin-bottom:5px;">
-        <input type="date" id="dateInput_${i}" value="${inputDateValue}" class="admin-date-input" placeholder="Set Date">
-      </div>
-      <button class="btn-approve" onclick="updateAppointment(${i}, 'Approved')">Approve</button>
-      <button class="btn-reject" onclick="updateAppointment(${i}, 'Rejected')">Reject</button>
-    `;
-
-    table += `<tr>
-      <td><strong>${refId}</strong></td>
-      <td>${name}</td>
-      <td>${email}</td>
-      <td>${phone}</td>
-      <td>${service}</td>
-      <td><span class="${statusClass}">${status}</span></td>
-      <td>${displayDate}</td>
-      <td style="min-width: 140px;">${actionButtons}</td>
-    </tr>`;
-  }
-  table += "</table>";
-  document.getElementById('tableContainer').innerHTML = table;
 }
 
-// 5. ADMIN UPDATE STATUS & DATE
+// Render Both Tables
+function renderAdminTables(appData, jobData) {
+  // --- Render Appointments Table ---
+  let appTable = "<table><tr><th>Ref ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Status</th><th>Date</th><th>Action</th></tr>";
+  if(appData && appData.length > 1) {
+    for(let i = appData.length - 1; i >= 1; i--) {
+      let refId = appData[i][0] || "N/A";
+      let name = appData[i][1] || "N/A";
+      let phone = appData[i][2] || "N/A";
+      let email = appData[i][4] || "N/A";     
+      let service = appData[i][5] || "N/A";   
+      let status = appData[i][7] || "Pending"; 
+      let rawDate = appData[i][8] || "";       
+      let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
+      
+      appTable += `<tr>
+        <td><strong>${refId}</strong></td><td>${name}</td><td>${email}</td><td>${phone}</td><td>${service}</td>
+        <td><span class="${statusClass}">${status}</span></td><td>${formatDate(rawDate)}</td>
+        <td style="min-width: 140px;">
+          <input type="date" id="dateInput_${i}" value="${formatForInput(rawDate)}" class="admin-date-input" style="margin-bottom:5px;">
+          <button class="btn-approve" onclick="updateAppointment(${i}, 'Approved')">Approve</button>
+          <button class="btn-reject" onclick="updateAppointment(${i}, 'Rejected')">Reject</button>
+        </td></tr>`;
+    }
+  } else { appTable += "<tr><td colspan='8'>No appointments found.</td></tr>"; }
+  appTable += "</table>";
+  document.getElementById('appointmentTableContainer').innerHTML = appTable;
+
+  // --- Render Job Applications Table ---
+  let jobTable = "<table><tr><th>App ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Position</th><th>Details</th><th>Status</th><th>Action</th></tr>";
+  if(jobData && jobData.length > 1) {
+    for(let i = jobData.length - 1; i >= 1; i--) {
+      let appId = jobData[i][0] || "N/A";
+      let name = jobData[i][1] || "N/A";
+      let phone = jobData[i][2] || "N/A";
+      let email = jobData[i][3] || "N/A";
+      let position = jobData[i][4] || "N/A";
+      let details = jobData[i][5] || "N/A";
+      let status = jobData[i][7] || "Pending";
+      let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
+      
+      jobTable += `<tr>
+        <td><strong>${appId}</strong></td><td>${name}</td><td>${phone}</td><td>${email}</td><td>${position}</td>
+        <td style="max-width:200px; overflow:hidden;">${details}</td><td><span class="${statusClass}">${status}</span></td>
+        <td style="min-width: 90px;">
+          <button class="btn-approve" onclick="updateJob(${i}, 'Approved')">Approve</button>
+          <button class="btn-reject" onclick="updateJob(${i}, 'Rejected')">Reject</button>
+        </td></tr>`;
+    }
+  } else { jobTable += "<tr><td colspan='8'>No job applications found.</td></tr>"; }
+  jobTable += "</table>";
+  document.getElementById('jobTableContainer').innerHTML = jobTable;
+}
+
+// Update Appointment
 function updateAppointment(index, newStatus) {
   const dateVal = document.getElementById(`dateInput_${index}`).value;
   let visitingDateText = "Not Scheduled Yet";
-  
   if(dateVal) {
     let parts = dateVal.split("-");
-    if(parts.length === 3) {
-      visitingDateText = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    } else {
-      visitingDateText = dateVal;
-    }
+    if(parts.length === 3) visitingDateText = `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
-  
-  document.getElementById('tableContainer').innerHTML = `<p class='msg-box info-text'><div class="spinner" style="border-top-color:#3498db;"></div> Updating status & date...</p>`;
-  
+  document.getElementById('appointmentTableContainer').innerHTML = `<p class='msg-box info-text'><div class="spinner" style="border-top-color:#3498db;"></div> Updating...</p>`;
   callAPI({ action: 'update', rowIndex: index, status: newStatus, visitingDate: visitingDateText }, function(res) {
-    if(res.success) showData(res.data);
+    if(res.success) renderAdminTables(res.appointmentData, res.jobData);
   });
 }
 
-// 6. LOGOUT
+// Update Job Application
+function updateJob(index, newStatus) {
+  document.getElementById('jobTableContainer').innerHTML = `<p class='msg-box info-text'><div class="spinner" style="border-top-color:#3498db;"></div> Updating status...</p>`;
+  callAPI({ action: 'updateJob', rowIndex: index, status: newStatus }, function(res) {
+    if(res.success) renderAdminTables(res.appointmentData, res.jobData);
+  });
+}
+
 function logoutAdmin() {
   document.getElementById('adminLoginSection').style.display = 'block';
   document.getElementById('adminDashboard').style.display = 'none';
   document.getElementById('adminId').value = '';
   document.getElementById('adminPassword').value = '';
-  document.getElementById('tableContainer').innerHTML = "Loading...";
 }
