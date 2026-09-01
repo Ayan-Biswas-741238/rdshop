@@ -1,4 +1,3 @@
-// Apnar Apps Script URL ekhan theke API Call hobe
 const API_URL = "https://script.google.com/macros/s/AKfycbzcf1JgISHCR4nMZOSLFcQNxSldeDFw-f_WBS4eXpmkiy9dHnp7j-lhVE9Oa0k0JgbY/exec";
 
 function toggleMenu() {
@@ -13,7 +12,19 @@ function showPage(pageId) {
   if (navLinks.classList.contains('show')) navLinks.classList.remove('show');
 }
 
-function callAPI(payload, successCallback) {
+// Button loading animation helper
+function setButtonState(btnId, isLoading, defaultText) {
+  const btn = document.getElementById(btnId);
+  if (isLoading) {
+    btn.disabled = true;
+    btn.innerHTML = `<div class="spinner"></div> Wait...`;
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = defaultText;
+  }
+}
+
+function callAPI(payload, successCallback, errorCallback) {
   fetch(API_URL, {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -23,7 +34,8 @@ function callAPI(payload, successCallback) {
   .then(data => successCallback(data))
   .catch(err => {
     console.error("API Error:", err);
-    alert("Connection error! Please check your network.");
+    if(errorCallback) errorCallback();
+    alert("Connection error! Please check your internet network.");
   });
 }
 
@@ -39,9 +51,13 @@ function submitBooking() {
 
   const msgBox = document.getElementById('bookingMessage');
   msgBox.className = "msg-box info-text";
-  msgBox.innerText = "Booking in progress, please wait...";
+  msgBox.innerText = "";
+  
+  // Start button spinner
+  setButtonState('bookBtn', true, 'Book Appointment');
   
   callAPI({ action: 'book', name, phone, address }, function(res) {
+    setButtonState('bookBtn', false, 'Book Appointment');
     if(res.success) {
       msgBox.className = "msg-box success-text";
       msgBox.innerText = res.message;
@@ -50,6 +66,8 @@ function submitBooking() {
       document.getElementById('address').value = '';
       setTimeout(() => { msgBox.innerText = ''; }, 5000);
     }
+  }, function() {
+    setButtonState('bookBtn', false, 'Book Appointment');
   });
 }
 
@@ -58,10 +76,13 @@ function loginAdmin() {
   const pass = document.getElementById('adminPassword').value;
   const msgBox = document.getElementById('adminMessage');
   
-  msgBox.className = "msg-box info-text";
-  msgBox.innerText = "Checking credentials...";
+  msgBox.innerText = "";
+  
+  // Start button spinner
+  setButtonState('loginBtn', true, 'Login');
   
   callAPI({ action: 'login', id: id, password: pass }, function(res) {
+    setButtonState('loginBtn', false, 'Login');
     if(res.success) {
       msgBox.innerText = "";
       document.getElementById('adminLoginSection').style.display = 'none';
@@ -71,6 +92,8 @@ function loginAdmin() {
       msgBox.className = "msg-box error-text";
       msgBox.innerText = res.message;
     }
+  }, function() {
+    setButtonState('loginBtn', false, 'Login');
   });
 }
 
@@ -97,7 +120,7 @@ function showData(data) {
       <td>${data[i][2]}</td>
       <td>${data[i][3]}</td>
       <td><span class="${statusClass}">${status}</span></td>
-      <td style="min-width: 90px;">${actionButtons}</td>
+      <td style="min-width: 100px;">${actionButtons}</td>
     </tr>`;
   }
   table += "</table>";
@@ -105,7 +128,7 @@ function showData(data) {
 }
 
 function changeStatus(index, newStatus) {
-  document.getElementById('tableContainer').innerHTML = "<p class='msg-box info-text'>Updating status, please wait...</p>";
+  document.getElementById('tableContainer').innerHTML = `<p class='msg-box info-text'><div class="spinner" style="border-top-color:#3498db;"></div> Updating status...</p>`;
   callAPI({ action: 'update', rowIndex: index, status: newStatus }, function(res) {
     if(res.success) showData(res.data);
   });
