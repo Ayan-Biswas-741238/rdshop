@@ -5,20 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RD Bathroom - Premium Services</title>
   
-  <!-- Google Fonts for Professional Typography -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="brand-logo">RD <span>Shop</span></div>
     <button class="burger-menu" id="burgerBtn" onclick="toggleMenu()">&#9776;</button>
     <div class="nav-links" id="navLinks">
       <a href="#" onclick="showPage('homePage')">Home</a>
       <a href="#" onclick="showPage('appointmentPage')">Appointment</a>
+      <a href="#" onclick="showPage('statusPage')">Check Status</a>
       <a href="#" onclick="showPage('contactPage')">Contact</a>
       <a href="#" onclick="showPage('adminPage')" class="admin-btn">Admin</a>
     </div>
@@ -26,21 +24,20 @@
 
   <div class="main-content">
     
-    <!-- HOME PAGE -->
     <div id="homePage" class="page-section active-page">
-      
-      <!-- Premium Hero Section -->
       <div class="hero-section">
         <div class="hero-content">
           <div class="offer-badge">🔥 সুলভ মূল্যে মাত্র ২০ টাকা থেকে শুরু!</div>
           <h1 class="shop-title">RD BATHROOM</h1>
+          
+          <img class="owner-img" src="https://i.postimg.cc/yNM8JWc0/Adobe-Scan-22-Feb-2025-1-1.png" alt="Proprietor Rahul Das">
+          
           <h3 class="shop-subtitle">ট্রায়াল রিপিয়ারিং শপ</h3>
           <p class="tagline">এখানে সমস্ত ধরনের বাথরুমের কাজ গোপনীয়ভাবে ও অত্যন্ত যত্নসহকারে করা হয়।</p>
           <button class="hero-btn" onclick="showPage('appointmentPage')">এখুনি বুক করুন ➔</button>
         </div>
       </div>
 
-      <!-- Modern Services Grid -->
       <div class="section-container">
         <h2 class="section-title text-center">আমাদের সেবাসমূহ</h2>
         <div class="services-grid">
@@ -67,31 +64,17 @@
         </div>
       </div>
 
-      <!-- Premium Features Grid -->
       <div class="section-container">
         <h2 class="section-title text-center">কেন আমাদের বেছে নেবেন?</h2>
         <div class="features-grid">
-          <div class="feature-box">
-            <span class="f-icon">👨‍🔧</span>
-            <strong>অভিজ্ঞ কর্মী</strong>
-          </div>
-          <div class="feature-box">
-            <span class="f-icon">⭐</span>
-            <strong>সেরা সার্ভিস</strong>
-          </div>
-          <div class="feature-box">
-            <span class="f-icon">💰</span>
-            <strong>সুলভ মূল্য</strong>
-          </div>
-          <div class="feature-box">
-            <span class="f-icon">🤝</span>
-            <strong>কাস্টমার সন্তুষ্টি</strong>
-          </div>
+          <div class="feature-box"><span class="f-icon">👨‍🔧</span> <strong>অভিজ্ঞ কর্মী</strong></div>
+          <div class="feature-box"><span class="f-icon">⭐</span> <strong>সেরা সার্ভিস</strong></div>
+          <div class="feature-box"><span class="f-icon">💰</span> <strong>সুলভ মূল্য</strong></div>
+          <div class="feature-box"><span class="f-icon">🤝</span> <strong>কাস্টমার সন্তুষ্টি</strong></div>
         </div>
       </div>
 
-      <!-- Video Section -->
-      <div class="section-container text-center" style="margin-bottom: 0;">
+      <div class="section-container text-center">
         <h2 class="section-title">আমাদের সম্পর্কে আরও জানুন</h2>
         <div class="video-container">
           <iframe src="https://drive.google.com/file/d/1OFH7rsXLNHK45rl4JswXn68paN9ty5_2/preview" allow="autoplay"></iframe>
@@ -99,21 +82,51 @@
       </div>
     </div>
 
-    <!-- APPOINTMENT PAGE -->
     <div id="appointmentPage" class="page-section">
       <div class="card-section">
+        
+        <div class="text-center" style="margin-bottom:15px;">
+          <div class="status-shortcut-btn" onclick="showPage('statusPage')">
+            🔍 Already Booked? Check Your Status ➔
+          </div>
+        </div>
+
         <h2 class="section-title">Book a New Appointment</h2>
         <div class="form-group">
-          <input type="text" id="name" placeholder="Your Name" required>
+          <input type="text" id="name" placeholder="Your Full Name" required>
           <input type="text" id="phone" placeholder="Phone Number" required>
-          <textarea id="address" placeholder="Your Address" rows="3" required></textarea>
+          <textarea id="address" placeholder="Your Full Address" rows="3" required></textarea>
+          
+          <label class="form-label">Select Service Required:</label>
+          <select id="service" class="form-select" required>
+            <option value="Bathroom Pipe Repair">বাথরুম ধরা ও পাইপের কাজ (Bathroom Pipe Repair)</option>
+            <option value="Toilet Cleaning">পায়খানার সাপ ও পরিষ্কার করা (Toilet Cleaning)</option>
+            <option value="Tanki & Fillup Clean">পায়খানা ফিলাপ ও ট্যাংকি পরিষ্কার (Tanki & Fillup Clean)</option>
+            <option value="Toilet Safe & Check">পায়খানা সেভ ও চেকিং (Toilet Safe & Check)</option>
+            <option value="Other Repairing Work">অন্যান্য বাথরুম রিপিয়ারিং কাজ (Other Repairing Work)</option>
+          </select>
+
           <button id="bookBtn" onclick="submitBooking()" class="btn-submit">Book Appointment</button>
         </div>
-        <p id="bookingMessage" class="msg-box"></p>
+        
+        <div id="bookingResult" class="booking-result-box" style="display:none;"></div>
       </div>
     </div>
 
-    <!-- CONTACT PAGE -->
+    <div id="statusPage" class="page-section">
+      <div class="card-section text-center">
+        <h2 class="section-title">Check Your Appointment Status</h2>
+        <p class="sub-text">Enter your 10-character Reference ID (e.g. S202610001) to check live status.</p>
+        
+        <div class="form-group" style="max-width:450px; margin: 20px auto 0;">
+          <input type="text" id="refIdInput" placeholder="Enter Reference ID (e.g. S202610001)" style="text-transform:uppercase;">
+          <button id="statusBtn" onclick="checkStatus()" class="btn-submit">Check Status</button>
+        </div>
+
+        <div id="statusResultCard" style="display:none;" class="status-result-card"></div>
+      </div>
+    </div>
+
     <div id="contactPage" class="page-section">
       <div class="card-section text-center">
         <h2 class="section-title">Contact Info</h2>
@@ -139,7 +152,6 @@
       </div>
     </div>
 
-    <!-- ADMIN PAGE -->
     <div id="adminPage" class="page-section">
       <div class="card-section" id="adminLoginSection">
         <h2 class="section-title">Admin Login</h2>
@@ -153,7 +165,7 @@
 
       <div class="card-section" id="adminDashboard" style="display:none;">
         <div class="header-flex">
-          <h2 class="section-title" style="margin:0; border:none;">Appointment List</h2>
+          <h2 class="section-title" style="margin:0; border:none;">Appointment Management</h2>
           <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
         </div>
         <div id="tableContainer" class="table-responsive">Loading...</div>
