@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RD Bathroom - Professional Services</title>
+  <title>RD Bathroom - Premium Services</title>
+  
+  <!-- Google Fonts for Professional Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <nav class="navbar">
-    <div class="brand-logo">RD Shop</div>
+    <div class="brand-logo">RD <span>Shop</span></div>
     <button class="burger-menu" id="burgerBtn" onclick="toggleMenu()">&#9776;</button>
     <div class="nav-links" id="navLinks">
       <a href="#" onclick="showPage('homePage')">Home</a>
@@ -21,35 +26,72 @@
 
   <div class="main-content">
     
+    <!-- HOME PAGE -->
     <div id="homePage" class="page-section active-page">
       
-      <div class="hero-section text-center">
-        <h1 class="shop-title">RD BATHROOM</h1>
-        <h3 class="shop-subtitle">ট্রায়াল রিপিয়ারিং শপ</h3>
-        <p class="tagline">এখানে সমস্ত ধরনের BATHROOM এর কাজ গোপনীয়ভাবে ও অত্যন্ত যত্নসহকারে করা হয়।</p>
-        <div class="offer-badge">সুলভ মূল্যে মাত্র 20 টাকা থেকে শুরু!</div>
+      <!-- Premium Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="offer-badge">🔥 সুলভ মূল্যে মাত্র ২০ টাকা থেকে শুরু!</div>
+          <h1 class="shop-title">RD BATHROOM</h1>
+          <h3 class="shop-subtitle">ট্রায়াল রিপিয়ারিং শপ</h3>
+          <p class="tagline">এখানে সমস্ত ধরনের বাথরুমের কাজ গোপনীয়ভাবে ও অত্যন্ত যত্নসহকারে করা হয়।</p>
+          <button class="hero-btn" onclick="showPage('appointmentPage')">এখুনি বুক করুন ➔</button>
+        </div>
       </div>
 
-      <div class="card-section">
-        <h2 class="section-title">আমাদের সেবাসমূহ</h2>
-        <ul class="service-list">
-          <li>✔️ বাথরুম ধরা থেকে শুরু করে পাইপের কাজ</li>
-          <li>✔️ পায়খানার সাপ করা / পরিষ্কার করা</li>
-          <li>✔️ পায়খানা ফিলাপ পরিষ্কার করা</li>
-          <li>✔️ পায়খানার ট্যাংকি পরিষ্কার করা</li>
-          <li>✔️ পায়খানা সেভ করা</li>
-          <li>✔️ কাস্টমারের সুরক্ষায় বারবার কাজ চেক করা হয় যাতে কোন ত্রুটি না ঘটে</li>
-        </ul>
+      <!-- Modern Services Grid -->
+      <div class="section-container">
+        <h2 class="section-title text-center">আমাদের সেবাসমূহ</h2>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="icon-circle">🔧</div>
+            <h4>পাইপের কাজ</h4>
+            <p>বাথরুম ধরা থেকে শুরু করে যাবতীয় পাইপের কাজ নিখুঁতভাবে করা হয়।</p>
+          </div>
+          <div class="service-card">
+            <div class="icon-circle">🧹</div>
+            <h4>সাপ ও পরিষ্কার</h4>
+            <p>পায়খানার সাপ করা এবং সম্পূর্ণ পরিষ্কার করার সেরা সুবিধা।</p>
+          </div>
+          <div class="service-card">
+            <div class="icon-circle">✨</div>
+            <h4>ফিলাপ ও ট্যাংকি</h4>
+            <p>পায়খানা ফিলাপ এবং ট্যাংকি পরিষ্কারের ১০০% নির্ভরযোগ্য কাজ।</p>
+          </div>
+          <div class="service-card">
+            <div class="icon-circle">🛡️</div>
+            <h4>সেভ ও চেকিং</h4>
+            <p>পায়খানা সেভ করা এবং ত্রুটি এড়াতে বারবার চেক করা হয়।</p>
+          </div>
+        </div>
       </div>
 
-      <div class="features-grid">
-        <div class="feature-box">🛡️ <strong>অভিজ্ঞ কর্মী দ্বারা কাজ</strong></div>
-        <div class="feature-box">⭐ <strong>সেরা সার্ভিস</strong></div>
-        <div class="feature-box">💰 <strong>সুলভ মূল্য</strong></div>
-        <div class="feature-box">🤝 <strong>কাস্টমার সন্তুষ্টি প্রথম লক্ষ্য</strong></div>
+      <!-- Premium Features Grid -->
+      <div class="section-container">
+        <h2 class="section-title text-center">কেন আমাদের বেছে নেবেন?</h2>
+        <div class="features-grid">
+          <div class="feature-box">
+            <span class="f-icon">👨‍🔧</span>
+            <strong>অভিজ্ঞ কর্মী</strong>
+          </div>
+          <div class="feature-box">
+            <span class="f-icon">⭐</span>
+            <strong>সেরা সার্ভিস</strong>
+          </div>
+          <div class="feature-box">
+            <span class="f-icon">💰</span>
+            <strong>সুলভ মূল্য</strong>
+          </div>
+          <div class="feature-box">
+            <span class="f-icon">🤝</span>
+            <strong>কাস্টমার সন্তুষ্টি</strong>
+          </div>
+        </div>
       </div>
 
-      <div class="card-section text-center">
+      <!-- Video Section -->
+      <div class="section-container text-center" style="margin-bottom: 0;">
         <h2 class="section-title">আমাদের সম্পর্কে আরও জানুন</h2>
         <div class="video-container">
           <iframe src="https://drive.google.com/file/d/1OFH7rsXLNHK45rl4JswXn68paN9ty5_2/preview" allow="autoplay"></iframe>
@@ -57,6 +99,7 @@
       </div>
     </div>
 
+    <!-- APPOINTMENT PAGE -->
     <div id="appointmentPage" class="page-section">
       <div class="card-section">
         <h2 class="section-title">Book a New Appointment</h2>
@@ -70,35 +113,33 @@
       </div>
     </div>
 
+    <!-- CONTACT PAGE -->
     <div id="contactPage" class="page-section">
       <div class="card-section text-center">
         <h2 class="section-title">Contact Info</h2>
-        
         <div class="contact-grid">
           <div class="contact-card">
             <div class="icon">📍</div>
             <h4>Address</h4>
             <p>গ্রাম: শ্রীধরপুর, ঘোলা<br>রানাঘাট, নদীয়া</p>
           </div>
-          
           <div class="contact-card">
             <div class="icon">📞</div>
             <h4>Phone</h4>
             <p><strong>Mobile:</strong> 9002785595</p>
             <p><strong>Care:</strong> 1800-1200-300</p>
           </div>
-          
           <div class="contact-card">
             <div class="icon">👤</div>
             <h4>Proprietor</h4>
             <p>Rahul Das</p>
           </div>
         </div>
-
         <a href="mailto:rahuldas8315@gmail.com" class="btn-email">Send an Email</a>
       </div>
     </div>
 
+    <!-- ADMIN PAGE -->
     <div id="adminPage" class="page-section">
       <div class="card-section" id="adminLoginSection">
         <h2 class="section-title">Admin Login</h2>
@@ -112,7 +153,7 @@
 
       <div class="card-section" id="adminDashboard" style="display:none;">
         <div class="header-flex">
-          <h2 class="section-title" style="margin:0;">Appointment List</h2>
+          <h2 class="section-title" style="margin:0; border:none;">Appointment List</h2>
           <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
         </div>
         <div id="tableContainer" class="table-responsive">Loading...</div>
