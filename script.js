@@ -1,5 +1,4 @@
-// Updated Google Apps Script Web App URL
-const API_URL = "https://script.google.com/macros/s/AKfycbzd-_1EH8ymdjQhNjAD-7mml1PXoi9rRTZEODx6-L9a9MyT4siWNFQ_DHlOffT0ZHI-/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzcBv_B-8wA5BH-mztKHXJZWvI-hCd0YXnBQN5an-ZO0kyLE2UXAt3D2A3HDejX7jEx/exec";
 
 function toggleMenu() {
   document.getElementById('navLinks').classList.toggle('show');
@@ -8,7 +7,6 @@ function toggleMenu() {
 function showPage(pageId) {
   document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active-page'));
   document.getElementById(pageId).classList.add('active-page');
-  
   const navLinks = document.getElementById('navLinks');
   if (navLinks.classList.contains('show')) navLinks.classList.remove('show');
 }
@@ -63,7 +61,7 @@ function submitBooking() {
         <h3 style="color:#27ae60;">🎉 ${res.message}</h3>
         <p style="margin-top:10px;">Please save your Reference ID to check status later:</p>
         <div class="ref-badge">${res.refId}</div>
-        <p style="font-size:13px; color:#666;">Note down this Reference ID carefully.</p>
+        <p style="font-size:13px; color:#666;">Note down this Reference ID carefully. Confirmation mail has been sent.</p>
       `;
       document.getElementById('name').value = '';
       document.getElementById('phone').value = '';
@@ -74,29 +72,7 @@ function submitBooking() {
   });
 }
 
-// DATE FORMATTER HELPER (DD/MM/YYYY)
-function formatDate(dateString) {
-  if (!dateString || dateString === "Not Scheduled Yet") return "Not Scheduled Yet";
-  let d = new Date(dateString);
-  if (isNaN(d.getTime())) return dateString; 
-  let day = String(d.getDate()).padStart(2, '0');
-  let month = String(d.getMonth() + 1).padStart(2, '0');
-  let year = d.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
-// DATE FORMATTER FOR INPUT FIELD (YYYY-MM-DD)
-function formatDateForInput(dateString) {
-  if (!dateString || dateString === "Not Scheduled Yet") return "";
-  let d = new Date(dateString);
-  if (isNaN(d.getTime())) return ""; 
-  let day = String(d.getDate()).padStart(2, '0');
-  let month = String(d.getMonth() + 1).padStart(2, '0');
-  let year = d.getFullYear();
-  return `${year}-${month}-${day}`;
-}
-
-// 2. CHECK APPOINTMENT STATUS
+// 2. CHECK STATUS
 function checkStatus() {
   const refId = document.getElementById('refIdInput').value.trim();
   if(!refId) {
@@ -116,16 +92,13 @@ function checkStatus() {
       const item = res.data;
       let statusBadge = item.status === "Approved" ? "status-approved" : (item.status === "Rejected" ? "status-rejected" : "status-pending");
       
-      // Date Formatting Applied Here
-      let displayDate = formatDate(item.visitingDate);
-
       statusCard.innerHTML = `
         <h3 style="color:#2c3e50; margin-bottom:15px; text-align:center;">Appointment Details</h3>
         <div class="status-row"><strong>Reference ID:</strong> <span>${item.refId}</span></div>
         <div class="status-row"><strong>Name:</strong> <span>${item.name}</span></div>
         <div class="status-row"><strong>Service:</strong> <span>${item.service}</span></div>
         <div class="status-row"><strong>Status:</strong> <span class="${statusBadge}">${item.status}</span></div>
-        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${displayDate}</span></div>
+        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${item.visitingDate}</span></div>
       `;
     } else {
       statusCard.innerHTML = `<p style="color:#e74c3c; text-align:center; font-weight:bold;">❌ ${res.message}</p>`;
@@ -160,6 +133,14 @@ function loginAdmin() {
   });
 }
 
+// Convert DD/MM/YYYY to YYYY-MM-DD for input field
+function formatForInput(dateStr) {
+  if(!dateStr || dateStr === "Not Scheduled Yet") return "";
+  let parts = dateStr.split("/");
+  if(parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  return "";
+}
+
 // 4. DISPLAY ADMIN DATA TABLE
 function showData(data) {
   if(data.length <= 1) {
@@ -172,17 +153,14 @@ function showData(data) {
   for(let i = data.length - 1; i >= 1; i--) {
     let refId = data[i][0] || "N/A";
     let status = data[i][6] || "Pending";
-    let rawDate = data[i][7] || "";
+    let visitingDate = data[i][7] || "Not Scheduled Yet";
     
     let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
-
-    // Date Formatting Applied Here for Table & Input field
-    let displayDate = formatDate(rawDate);
-    let inputDateValue = formatDateForInput(rawDate);
+    let inputDateVal = formatForInput(visitingDate);
 
     let actionButtons = `
       <div style="margin-bottom:5px;">
-        <input type="date" id="dateInput_${i}" value="${inputDateValue}" class="admin-date-input" placeholder="Set Date">
+        <input type="date" id="dateInput_${i}" value="${inputDateVal}" class="admin-date-input" placeholder="Set Date">
       </div>
       <button class="btn-approve" onclick="updateAppointment(${i}, 'Approved')">Approve</button>
       <button class="btn-reject" onclick="updateAppointment(${i}, 'Rejected')">Reject</button>
@@ -195,7 +173,7 @@ function showData(data) {
       <td>${data[i][3]}</td>
       <td>${data[i][4]}</td>
       <td><span class="${statusClass}">${status}</span></td>
-      <td>${displayDate}</td>
+      <td>${visitingDate}</td>
       <td style="min-width: 140px;">${actionButtons}</td>
     </tr>`;
   }
@@ -205,8 +183,18 @@ function showData(data) {
 
 // 5. ADMIN UPDATE STATUS & DATE
 function updateAppointment(index, newStatus) {
-  const dateVal = document.getElementById(`dateInput_${index}`).value;
-  let visitingDateText = dateVal ? dateVal : "Not Scheduled Yet";
+  const dateVal = document.getElementById(`dateInput_${index}`).value; // Format comes as YYYY-MM-DD
+  let visitingDateText = "Not Scheduled Yet";
+  
+  // Convert YYYY-MM-DD back to DD/MM/YYYY for storing
+  if(dateVal) {
+    let parts = dateVal.split("-");
+    if(parts.length === 3) {
+      visitingDateText = `${parts[2]}/${parts[1]}/${parts[0]}`;
+    } else {
+      visitingDateText = dateVal;
+    }
+  }
   
   document.getElementById('tableContainer').innerHTML = `<p class='msg-box info-text'><div class="spinner" style="border-top-color:#3498db;"></div> Updating status & date...</p>`;
   
