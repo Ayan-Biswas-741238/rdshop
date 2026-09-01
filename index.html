@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RD Bathroom - Premium Services</title>
+  <title>RD Bathroom - Premium Services & Careers</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="brand-logo">RD <span>Shop</span></div>
     <button class="burger-menu" id="burgerBtn" onclick="toggleMenu()">&#9776;</button>
@@ -17,6 +18,7 @@
       <a href="#" onclick="showPage('homePage')">Home</a>
       <a href="#" onclick="showPage('appointmentPage')">Appointment</a>
       <a href="#" onclick="showPage('statusPage')">Check Status</a>
+      <a href="#" onclick="showPage('careerPage')">Career</a>
       <a href="#" onclick="showPage('contactPage')">Contact</a>
       <a href="#" onclick="showPage('adminPage')" class="admin-btn">Admin</a>
     </div>
@@ -24,6 +26,7 @@
 
   <div class="main-content">
     
+    <!-- HOME PAGE -->
     <div id="homePage" class="page-section active-page">
       <div class="hero-section">
         <div class="hero-content">
@@ -48,16 +51,6 @@
         </div>
       </div>
 
-      <div class="section-container">
-        <h2 class="section-title text-center">কেন আমাদের বেছে নেবেন?</h2>
-        <div class="features-grid">
-          <div class="feature-box"><span class="f-icon">👨‍🔧</span> <strong>অভিজ্ঞ কর্মী</strong></div>
-          <div class="feature-box"><span class="f-icon">⭐</span> <strong>সেরা সার্ভিস</strong></div>
-          <div class="feature-box"><span class="f-icon">💰</span> <strong>সুলভ মূল্য</strong></div>
-          <div class="feature-box"><span class="f-icon">🤝</span> <strong>কাস্টমার সন্তুষ্টি</strong></div>
-        </div>
-      </div>
-
       <div class="section-container text-center">
         <h2 class="section-title">আমাদের সম্পর্কে আরও জানুন</h2>
         <div class="video-container">
@@ -66,9 +59,9 @@
       </div>
     </div>
 
+    <!-- APPOINTMENT PAGE -->
     <div id="appointmentPage" class="page-section">
       <div class="card-section">
-        
         <div class="text-center" style="margin-bottom:15px;">
           <div class="status-shortcut-btn" onclick="showPage('statusPage')">
             🔍 Already Booked? Check Your Status ➔
@@ -84,34 +77,59 @@
           
           <label class="form-label">Select Service Required:</label>
           <select id="service" class="form-select" required>
-            <option value="Bathroom Pipe Repair">বাথরুম ধরা ও পাইপের কাজ (Bathroom Pipe Repair)</option>
-            <option value="Toilet Cleaning">পায়খানার সাপ ও পরিষ্কার করা (Toilet Cleaning)</option>
-            <option value="Tanki & Fillup Clean">পায়খানা ফিলাপ ও ট্যাংকি পরিষ্কার (Tanki & Fillup Clean)</option>
-            <option value="Toilet Safe & Check">পায়খানা সেভ ও চেকিং (Toilet Safe & Check)</option>
-            <option value="Other Repairing Work">অন্যান্য বাথরুম রিপিয়ারিং কাজ (Other Repairing Work)</option>
+            <option value="Bathroom Pipe Repair">বাথরুম ধরা ও পাইপের কাজ</option>
+            <option value="Toilet Cleaning">পায়খানার সাপ ও পরিষ্কার করা</option>
+            <option value="Tanki & Fillup Clean">পায়খানা ফিলাপ ও ট্যাংকি পরিষ্কার</option>
+            <option value="Toilet Safe & Check">পায়খানা সেভ ও চেকিং</option>
+            <option value="Other Repairing Work">অন্যান্য বাথরুম কাজ</option>
           </select>
 
           <button id="bookBtn" onclick="submitBooking()" class="btn-submit">Book Appointment</button>
         </div>
-        
         <div id="bookingResult" class="booking-result-box" style="display:none;"></div>
       </div>
     </div>
 
+    <!-- CAREER PAGE -->
+    <div id="careerPage" class="page-section">
+      <div class="card-section">
+        <h2 class="section-title">Career - Apply for a Job</h2>
+        <p class="sub-text">Join the RD Bathroom team! Fill out the form below to apply.</p>
+        <div class="form-group">
+          <input type="text" id="jobName" placeholder="Your Full Name" required>
+          <input type="text" id="jobPhone" placeholder="Phone Number" required>
+          <input type="email" id="jobEmail" placeholder="Your Email Address" required>
+          
+          <label class="form-label">Position Applying For:</label>
+          <select id="jobPosition" class="form-select" required>
+            <option value="Senior Plumber">Senior Plumber (অভিজ্ঞ প্লাম্বার)</option>
+            <option value="Cleaning Staff">Cleaning Staff (ক্লিনিং স্টাফ)</option>
+            <option value="Helper">Helper (হেল্পার)</option>
+            <option value="Manager/Supervisor">Manager/Supervisor (ম্যানেজার)</option>
+          </select>
+
+          <textarea id="jobExperience" placeholder="Your Experience / Address / Details" rows="4" required></textarea>
+          <button id="jobBtn" onclick="submitJobApplication()" class="btn-submit" style="background-color: #27ae60;">Submit Application</button>
+        </div>
+        <div id="jobResult" class="booking-result-box" style="display:none; border-color: #3498db; background: #ebf5fb;"></div>
+      </div>
+    </div>
+
+    <!-- CHECK STATUS PAGE -->
     <div id="statusPage" class="page-section">
       <div class="card-section text-center">
-        <h2 class="section-title">Check Your Appointment Status</h2>
-        <p class="sub-text">Enter your 10-character Reference ID (e.g. S202610001) to check live status.</p>
+        <h2 class="section-title">Check Appointment Status</h2>
+        <p class="sub-text">Enter your Reference ID (e.g. S202610001)</p>
         
         <div class="form-group" style="max-width:450px; margin: 20px auto 0;">
           <input type="text" id="refIdInput" placeholder="Enter Reference ID" style="text-transform:uppercase;">
           <button id="statusBtn" onclick="checkStatus()" class="btn-submit">Check Status</button>
         </div>
-
         <div id="statusResultCard" style="display:none;" class="status-result-card"></div>
       </div>
     </div>
 
+    <!-- CONTACT PAGE -->
     <div id="contactPage" class="page-section">
       <div class="card-section text-center">
         <h2 class="section-title">Contact Info</h2>
@@ -124,6 +142,7 @@
       </div>
     </div>
 
+    <!-- ADMIN PAGE -->
     <div id="adminPage" class="page-section">
       <div class="card-section" id="adminLoginSection">
         <h2 class="section-title">Admin Login</h2>
@@ -135,12 +154,21 @@
         <p id="adminMessage" class="msg-box"></p>
       </div>
 
-      <div class="card-section" id="adminDashboard" style="display:none;">
+      <div class="card-section" id="adminDashboard" style="display:none; max-width: 100%;">
         <div class="header-flex">
-          <h2 class="section-title" style="margin:0; border:none;">Appointment Management</h2>
+          <h2 class="section-title" style="margin:0; border:none;">Admin Dashboard</h2>
           <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
         </div>
-        <div id="tableContainer" class="table-responsive">Loading...</div>
+        
+        <!-- Admin Tabs -->
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active-tab" id="tabAppBtn" onclick="switchAdminTab('appointments')">Appointments</button>
+          <button class="admin-tab-btn" id="tabJobBtn" onclick="switchAdminTab('jobs')">Job Applications</button>
+        </div>
+
+        <!-- Tables -->
+        <div id="appointmentTableContainer" class="table-responsive">Loading...</div>
+        <div id="jobTableContainer" class="table-responsive" style="display:none;">Loading...</div>
       </div>
     </div>
   </div>
