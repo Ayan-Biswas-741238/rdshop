@@ -1,5 +1,8 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbyDB7Rlmk5LvTtI35DKP4K6NGGHAP3wEO74B2uVj--RwwumMEICy5DnU9iG8ajEm1kL/exec";
 
+let currentAdminId = "";
+let currentAdminPass = "";
+
 function toggleMenu() { document.getElementById('navLinks').classList.toggle('show'); }
 
 function showPage(pageId) {
@@ -7,6 +10,33 @@ function showPage(pageId) {
   document.getElementById(pageId).classList.add('active-page');
   const navLinks = document.getElementById('navLinks');
   if (navLinks.classList.contains('show')) navLinks.classList.remove('show');
+}
+
+// Page Reset / Refresh Handler
+function refreshPage(pageId) {
+  if (pageId === 'appointmentPage') {
+    document.getElementById('name').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('address').value = '';
+    document.getElementById('service').selectedIndex = 0;
+    document.getElementById('bookingResult').style.display = 'none';
+    document.getElementById('bookingResult').innerHTML = '';
+  } else if (pageId === 'careerPage') {
+    document.getElementById('jobName').value = '';
+    document.getElementById('jobPhone').value = '';
+    document.getElementById('jobEmail').value = '';
+    document.getElementById('jobPosition').selectedIndex = 0;
+    document.getElementById('jobExperience').value = '';
+    document.getElementById('jobResult').style.display = 'none';
+    document.getElementById('jobResult').innerHTML = '';
+  } else if (pageId === 'statusPage') {
+    document.getElementById('refIdInput').value = '';
+    document.getElementById('statusResultCard').style.display = 'none';
+    document.getElementById('statusResultCard').innerHTML = '';
+  } else if (pageId === 'contactPage') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function setButtonState(btnId, isLoading, defaultText) {
@@ -161,6 +191,8 @@ function loginAdmin() {
   callAPI({ action: 'login', id: id, password: pass }, function(res) {
     setButtonState('loginBtn', false, 'Login');
     if(res.success) {
+      currentAdminId = id;
+      currentAdminPass = pass;
       msgBox.innerText = "";
       document.getElementById('adminLoginSection').style.display = 'none';
       document.getElementById('adminDashboard').style.display = 'block';
@@ -169,6 +201,24 @@ function loginAdmin() {
       msgBox.className = "msg-box error-text"; msgBox.innerText = res.message;
     }
   }, function() { setButtonState('loginBtn', false, 'Login'); });
+}
+
+// Real-Time Admin Data Refresh
+function refreshAdminData() {
+  if (!currentAdminId || !currentAdminPass) {
+    document.getElementById('adminId').value = '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminMessage').innerText = '';
+    return;
+  }
+  
+  setButtonState('adminRefreshBtn', true, '🔄 Refreshing...');
+  callAPI({ action: 'login', id: currentAdminId, password: currentAdminPass }, function(res) {
+    setButtonState('adminRefreshBtn', false, '🔄 Refresh Data');
+    if(res.success) {
+      renderAdminTables(res.appointmentData, res.jobData);
+    }
+  }, function() { setButtonState('adminRefreshBtn', false, '🔄 Refresh Data'); });
 }
 
 // Switch Tabs
@@ -264,6 +314,8 @@ function updateJob(index, newStatus) {
 }
 
 function logoutAdmin() {
+  currentAdminId = "";
+  currentAdminPass = "";
   document.getElementById('adminLoginSection').style.display = 'block';
   document.getElementById('adminDashboard').style.display = 'none';
   document.getElementById('adminId').value = '';
