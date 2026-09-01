@@ -2,47 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <base target="_top">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Professional Booking Website</title>
-  <?!= include('style'); ?>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <div class="navbar">
-    <a href="#" onclick="showPage('homePage')">Home</a>
-    <a href="#" onclick="showPage('appointmentPage')">Appointment</a>
-    <a href="#" onclick="showPage('contactPage')">Contact</a>
-    <a href="#" onclick="showPage('adminPage')" style="float:right; background:#343a40;">Admin</a>
-  </div>
+  <nav class="navbar">
+    <div class="brand-logo">RD Shop</div>
+    
+    <button class="burger-menu" id="burgerBtn" onclick="toggleMenu()">
+      &#9776;
+    </button>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#" onclick="showPage('homePage')">Home</a>
+      <a href="#" onclick="showPage('appointmentPage')">Appointment</a>
+      <a href="#" onclick="showPage('contactPage')">Contact</a>
+      <a href="#" onclick="showPage('adminPage')" class="admin-btn">Admin</a>
+    </div>
+  </nav>
 
   <div class="main-content">
     
-    <!-- HOME PAGE -->
     <div id="homePage" class="page-section active-page">
       <h2>Welcome to Our Services</h2>
       <p>Watch the video below to learn more about what we offer.</p>
       <div class="video-container">
-        <iframe src="https://drive.google.com/file/d/1OFH7rsXLNHK45rl4JswXn68paN9ty5_2/preview" width="640" height="480" allow="autoplay"></iframe>
+        <iframe src="https://drive.google.com/file/d/1OFH7rsXLNHK45rl4JswXn68paN9ty5_2/preview" allow="autoplay"></iframe>
       </div>
     </div>
 
-    <!-- APPOINTMENT PAGE -->
     <div id="appointmentPage" class="page-section">
-      <div class="section">
+      <div class="card-section">
         <h3>Book a New Appointment</h3>
         <input type="text" id="name" placeholder="Your Name" required>
         <input type="text" id="phone" placeholder="Phone Number" required>
         <textarea id="address" placeholder="Your Address" rows="3" required></textarea>
-        <button onclick="submitBooking()">Book Appointment</button>
-        <p id="bookingMessage" class="success-msg"></p>
+        <button onclick="submitBooking()" class="btn-submit">Book Appointment</button>
+        <p id="bookingMessage" class="msg-box"></p>
       </div>
     </div>
 
-    <!-- CONTACT PAGE -->
     <div id="contactPage" class="page-section">
-      <div class="section center-text">
+      <div class="card-section text-center">
         <h3>Contact Info</h3>
         <p><strong>Owner:</strong> Rahul Das</p>
         <p><strong>Customer Care:</strong> 1800-1200-300</p>
@@ -50,19 +53,16 @@
       </div>
     </div>
 
-    <!-- ADMIN PAGE -->
     <div id="adminPage" class="page-section">
-      <!-- Admin Login -->
-      <div class="section" id="adminLoginSection">
+      <div class="card-section" id="adminLoginSection">
         <h3>Admin Login</h3>
         <input type="text" id="adminId" placeholder="Enter Admin ID">
         <input type="password" id="adminPassword" placeholder="Enter Password">
-        <button onclick="loginAdmin()">Login</button>
-        <p id="adminMessage" class="error-msg"></p>
+        <button onclick="loginAdmin()" class="btn-submit">Login</button>
+        <p id="adminMessage" class="msg-box"></p>
       </div>
 
-      <!-- Admin Dashboard -->
-      <div class="section" id="adminDashboard" style="display:none;">
+      <div class="card-section" id="adminDashboard" style="display:none;">
         <div class="header-flex">
           <h3>Appointment List</h3>
           <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
@@ -73,6 +73,6 @@
 
   </div>
 
-  <?!= include('script'); ?>
+  <script src="script.js"></script>
 </body>
 </html>
