@@ -1,4 +1,3 @@
-/* Google Fonts Apply */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { 
   font-family: 'Poppins', 'Hind Siliguri', sans-serif; 
@@ -7,7 +6,7 @@ body {
   line-height: 1.6; 
 }
 
-/* Navbar Premium Design */
+/* Navbar */
 .navbar { 
   background-color: #ffffff; 
   display: flex; 
@@ -21,13 +20,12 @@ body {
 }
 .brand-logo { color: #2c3e50; font-size: 26px; font-weight: 800; letter-spacing: 0.5px;}
 .brand-logo span { color: #3498db; }
-.nav-links { display: flex; align-items: center; gap: 20px; }
-.nav-links a { color: #555; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 6px; transition: all 0.3s ease; }
+.nav-links { display: flex; align-items: center; gap: 15px; }
+.nav-links a { color: #555; text-decoration: none; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.3s ease; }
 .nav-links a:hover { color: #3498db; background: #f0f8ff; }
 .nav-links a.admin-btn { background-color: #2c3e50; color: white; }
 .nav-links a.admin-btn:hover { background-color: #1a252f; color: white;}
 
-/* Burger Button */
 .burger-menu { display: none; background: none; border: none; color: #2c3e50; font-size: 28px; cursor: pointer; }
 
 @media (max-width: 768px) {
@@ -37,92 +35,119 @@ body {
   .nav-links a { width: 90%; text-align: center; padding: 12px 0; border-bottom: 1px solid #eee;}
 }
 
-/* Page Layout */
+/* Main Content & Section Cards */
 .main-content { padding: 30px 5%; max-width: 1100px; margin: auto; }
-.page-section { display: none; animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+.page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
 .active-page { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Section Containers & Titles */
-.section-container { margin-bottom: 50px; }
-.card-section { border: none; padding: 35px; margin-top: 20px; border-radius: 16px; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+.section-container { margin-bottom: 40px; }
+.card-section { border: none; padding: 35px; margin-top: 20px; border-radius: 16px; background: #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.04); }
 .text-center { text-align: center; }
-.section-title { color: #2c3e50; font-weight: 700; font-size: 24px; margin-bottom: 30px; position: relative; display: inline-block;}
+.section-title { color: #2c3e50; font-weight: 700; font-size: 24px; margin-bottom: 25px; position: relative; display: inline-block;}
 .section-title::after { content: ''; position: absolute; width: 50%; height: 3px; background: #3498db; bottom: -8px; left: 25%; border-radius: 5px; }
+.sub-text { color: #666; font-size: 15px; margin-bottom: 15px; }
 
-/* 🌟 Premium Hero Section */
+/* Hero Banner & Circular Owner Image */
 .hero-section { 
-  background: linear-gradient(135deg, rgba(30, 60, 114, 0.95), rgba(42, 82, 152, 0.95)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
-  color: white; 
-  padding: 60px 20px; 
-  border-radius: 20px; 
-  margin-bottom: 40px; 
-  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.95), rgba(42, 82, 152, 0.95));
+  color: white; padding: 50px 20px; border-radius: 20px; margin-bottom: 35px; 
+  text-align: center; box-shadow: 0 12px 25px rgba(0,0,0,0.12);
 }
-.hero-content { position: relative; z-index: 2; }
-.shop-title { color: #f1c40f; font-size: 48px; margin-bottom: 5px; font-weight: 800; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);}
-.shop-subtitle { color: #ffffff; font-size: 24px; margin-bottom: 20px; font-weight: 600; opacity: 0.9;}
-.tagline { font-size: 17px; margin-bottom: 30px; color: #ecf0f1; max-width: 600px; margin-left: auto; margin-right: auto;}
-.offer-badge { background: #e74c3c; color: white; padding: 8px 20px; display: inline-block; border-radius: 30px; font-weight: 700; font-size: 15px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4); animation: pulse 2s infinite;}
-.hero-btn { background: #f1c40f; color: #2c3e50; padding: 14px 30px; font-size: 16px; font-weight: 700; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4);}
+.shop-title { color: #f1c40f; font-size: 42px; margin-bottom: 5px; font-weight: 800; letter-spacing: 2px;}
+
+.owner-img { 
+  width: 110px; 
+  height: 110px; 
+  border-radius: 50%; 
+  border: 4px solid #f1c40f; 
+  object-fit: cover; 
+  margin: 15px auto; 
+  display: block; 
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+}
+.owner-img:hover { transform: scale(1.05); }
+
+.shop-subtitle { color: #ffffff; font-size: 22px; margin-bottom: 15px; font-weight: 600;}
+.tagline { font-size: 16px; margin-bottom: 25px; color: #ecf0f1; max-width: 600px; margin-left: auto; margin-right: auto;}
+.offer-badge { background: #e74c3c; color: white; padding: 8px 20px; display: inline-block; border-radius: 30px; font-weight: 700; font-size: 14px; margin-bottom: 15px;}
+.hero-btn { background: #f1c40f; color: #2c3e50; padding: 14px 30px; font-size: 16px; font-weight: 700; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease;}
 .hero-btn:hover { background: #fff; transform: translateY(-3px); }
 
-/* 🌟 Modern Services Grid */
-.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
-.service-card { background: #fff; padding: 30px 20px; border-radius: 16px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.04); transition: all 0.3s ease; border: 1px solid #f0f0f0; position: relative; overflow: hidden;}
-.service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: #3498db;}
-.icon-circle { width: 70px; height: 70px; background: #f0f8ff; color: #3498db; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px; transition: 0.3s;}
-.service-card:hover .icon-circle { background: #3498db; color: white; }
-.service-card h4 { color: #2c3e50; font-size: 18px; margin-bottom: 10px; font-weight: 700;}
-.service-card p { color: #666; font-size: 14px; }
+/* Status Shortcut Button in Appointment Page */
+.status-shortcut-btn { 
+  background: #e8f4fc; 
+  color: #2980b9; 
+  border: 1px dashed #3498db; 
+  padding: 10px 22px; 
+  border-radius: 30px; 
+  font-size: 14px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  display: inline-block; 
+  transition: 0.3s;
+}
+.status-shortcut-btn:hover { 
+  background: #d4e6f1; 
+  transform: translateY(-2px); 
+}
 
-/* 🌟 Premium Features Grid */
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-.feature-box { background: linear-gradient(145deg, #ffffff, #f9f9f9); padding: 20px; border-radius: 12px; text-align: center; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; display: flex; align-items: center; justify-content: center; gap: 15px; transition: 0.3s;}
-.feature-box:hover { background: #3498db; color: white; transform: scale(1.03);}
-.f-icon { font-size: 24px; }
+/* Grid Cards */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+.service-card { background: #fff; padding: 25px 20px; border-radius: 14px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; transition: 0.3s;}
+.service-card:hover { transform: translateY(-8px); border-color: #3498db;}
+.icon-circle { width: 60px; height: 60px; background: #e8f4fc; color: #3498db; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 15px;}
 
-/* Forms & Buttons */
-.form-group input, .form-group textarea { padding: 15px; margin: 10px 0; width: 100%; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; font-size: 15px; background: #fafafa; transition: 0.3s;}
-.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #3498db; background: #fff; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);}
-.btn-submit { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: 600; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s;}
-.btn-submit:hover:not(:disabled) { background-color: #2980b9; transform: translateY(-2px);}
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+.feature-box { background: #fff; padding: 18px; border-radius: 12px; text-align: center; font-size: 15px; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; gap: 10px;}
+
+/* Form & Inputs */
+.form-label { font-weight: 600; margin-top: 15px; display: block; color: #2c3e50; text-align: left; }
+.form-group input, .form-group textarea, .form-select { padding: 14px; margin: 8px 0; width: 100%; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; font-size: 15px; background: #fafafa; transition: 0.3s;}
+.form-group input:focus, .form-group textarea:focus, .form-select:focus { outline: none; border-color: #3498db; background: #fff;}
+.btn-submit { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: 600; padding: 15px; border-radius: 8px; width: 100%; font-size: 16px; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px;}
+.btn-submit:hover:not(:disabled) { background-color: #2980b9;}
 .btn-submit:disabled { background-color: #95a5a6; cursor: not-allowed; }
 
-/* Contact & Admin styling */
-.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 30px; }
-.contact-card { background: #fff; padding: 30px 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-bottom: 4px solid #3498db;}
-.contact-card .icon { font-size: 35px; margin-bottom: 15px; color: #3498db;}
-.contact-card h4 { color: #2c3e50; margin-bottom: 10px; font-weight: 700;}
-.btn-email { background-color: #e74c3c; color: white; padding: 15px 35px; display: inline-block; text-decoration: none; border-radius: 30px; font-weight: 600; transition: 0.3s; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);}
-.btn-email:hover { background-color: #c0392b; transform: translateY(-3px);}
+/* Booking Result Box */
+.booking-result-box { margin-top: 25px; padding: 25px; border-radius: 12px; background: #e8f8f5; border: 2px dashed #27ae60; text-align: center;}
+.ref-badge { font-size: 24px; font-weight: 800; color: #27ae60; letter-spacing: 2px; margin: 10px 0; background: #fff; padding: 10px 20px; border-radius: 8px; display: inline-block;}
 
-/* Spinner & Tables */
+/* Status Result Card */
+.status-result-card { margin-top: 25px; padding: 25px; border-radius: 14px; background: #fff; border: 1px solid #e0e0e0; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;}
+.status-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 15px;}
+.status-row strong { color: #2c3e50; }
+
+/* Contact Cards */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px; }
+.contact-card { background: #fff; padding: 25px 15px; border-radius: 12px; border-bottom: 4px solid #3498db; box-shadow: 0 4px 12px rgba(0,0,0,0.04);}
+.contact-card .icon { font-size: 32px; margin-bottom: 10px; }
+.btn-email { background-color: #e74c3c; color: white; padding: 14px 30px; display: inline-block; text-decoration: none; border-radius: 30px; font-weight: 600;}
+
+/* Spinner */
 .spinner { border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #ffffff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-.video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-.table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.05);}
-table { width: 100%; border-collapse: collapse; font-size: 14px; background: white;}
-th, td { border: 1px solid #f0f0f0; padding: 15px; text-align: left; }
-th { background-color: #2c3e50; color: white; font-weight: 600; white-space: nowrap;}
-tr:nth-child(even) { background-color: #fafafa; }
-.header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
 
-.btn-approve, .btn-reject, .btn-logout { color: white; border: none; padding: 8px 15px; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: 0.2s;}
-.btn-approve { background-color: #27ae60; margin-bottom: 5px; width: 100%;}
-.btn-approve:hover { background-color: #219653;}
+/* Admin Table & Status Badges */
+.table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 8px;}
+table { width: 100%; border-collapse: collapse; font-size: 13px; background: white;}
+th, td { border: 1px solid #e0e0e0; padding: 12px; text-align: left; }
+th { background-color: #2c3e50; color: white; white-space: nowrap;}
+.admin-date-input { padding: 6px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px; width: 130px;}
+
+.btn-approve, .btn-reject, .btn-logout { color: white; border: none; padding: 6px 10px; font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer;}
+.btn-approve { background-color: #27ae60; margin-bottom: 4px; width: 100%;}
 .btn-reject { background-color: #e74c3c; width: 100%;}
-.btn-reject:hover { background-color: #c0392b;}
-.btn-logout { background-color: #95a5a6; }
-.btn-logout:hover { background-color: #7f8c8d; }
-.status-pending { color: #d35400; font-weight: 600; background: #fdf2e9; padding: 6px 12px; border-radius: 20px; display: inline-block; font-size: 12px;}
-.status-approved { color: #27ae60; font-weight: 600; background: #eaeded; padding: 6px 12px; border-radius: 20px; display: inline-block; font-size: 12px;}
-.status-rejected { color: #c0392b; font-weight: 600; background: #fdedec; padding: 6px 12px; border-radius: 20px; display: inline-block; font-size: 12px;}
+.btn-logout { background-color: #7f8c8d; }
+
+.status-pending { color: #d35400; font-weight: bold; background: #fdf2e9; padding: 4px 10px; border-radius: 20px; display: inline-block; font-size: 11px;}
+.status-approved { color: #27ae60; font-weight: bold; background: #e8f8f5; padding: 4px 10px; border-radius: 20px; display: inline-block; font-size: 11px;}
+.status-rejected { color: #c0392b; font-weight: bold; background: #fdedec; padding: 4px 10px; border-radius: 20px; display: inline-block; font-size: 11px;}
+
 .msg-box { font-weight: 600; margin-top: 15px; text-align: center;}
 .error-text { color: #e74c3c; }
 .success-text { color: #27ae60; }
 .info-text { color: #3498db; }
+.video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 14px; }
+.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
