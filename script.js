@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbzcBv_B-8wA5BH-mztKHXJZWvI-hCd0YXnBQN5an-ZO0kyLE2UXAt3D2A3HDejX7jEx/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzDxCvcyMIDnTjhoyqiArnRmiNLo0Jv6Vm6Lo8Rl-y_Pc7Ej3HiCtnvvegw4VDHme_f/exec";
 
 function toggleMenu() {
   document.getElementById('navLinks').classList.toggle('show');
@@ -37,15 +37,16 @@ function callAPI(payload, successCallback, errorCallback) {
   });
 }
 
-// 1. SUBMIT BOOKING
+// 1. SUBMIT BOOKING (Updated to include email)
 function submitBooking() {
   const name = document.getElementById('name').value.trim();
   const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
   const address = document.getElementById('address').value.trim();
   const service = document.getElementById('service').value;
 
-  if(!name || !phone || !address){
-    alert("Please fill in your name, phone number, and address.");
+  if(!name || !phone || !email || !address){
+    alert("Please fill in your name, phone, email, and address.");
     return;
   }
 
@@ -53,18 +54,19 @@ function submitBooking() {
   resultBox.style.display = 'none';
   setButtonState('bookBtn', true, 'Book Appointment');
   
-  callAPI({ action: 'book', name, phone, address, service }, function(res) {
+  callAPI({ action: 'book', name, phone, address, email, service }, function(res) {
     setButtonState('bookBtn', false, 'Book Appointment');
     if(res.success) {
       resultBox.style.display = 'block';
       resultBox.innerHTML = `
         <h3 style="color:#27ae60;">🎉 ${res.message}</h3>
-        <p style="margin-top:10px;">Please save your Reference ID to check status later:</p>
+        <p style="margin-top:10px;">Your Reference ID has been sent to your email.</p>
         <div class="ref-badge">${res.refId}</div>
-        <p style="font-size:13px; color:#666;">Note down this Reference ID carefully. Confirmation mail has been sent.</p>
+        <p style="font-size:13px; color:#666;">Note down this Reference ID carefully.</p>
       `;
       document.getElementById('name').value = '';
       document.getElementById('phone').value = '';
+      document.getElementById('email').value = '';
       document.getElementById('address').value = '';
     }
   }, function() {
@@ -72,7 +74,27 @@ function submitBooking() {
   });
 }
 
-// 2. CHECK STATUS
+function formatDate(dateString) {
+  if (!dateString || dateString === "Not Scheduled Yet") return "Not Scheduled Yet";
+  let d = new Date(dateString);
+  if (isNaN(d.getTime())) return dateString; 
+  let day = String(d.getDate()).padStart(2, '0');
+  let month = String(d.getMonth() + 1).padStart(2, '0');
+  let year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+function formatDateForInput(dateString) {
+  if (!dateString || dateString === "Not Scheduled Yet") return "";
+  let d = new Date(dateString);
+  if (isNaN(d.getTime())) return ""; 
+  let day = String(d.getDate()).padStart(2, '0');
+  let month = String(d.getMonth() + 1).padStart(2, '0');
+  let year = d.getFullYear();
+  return `${year}-${month}-${day}`;
+}
+
+// 2. CHECK APPOINTMENT STATUS
 function checkStatus() {
   const refId = document.getElementById('refIdInput').value.trim();
   if(!refId) {
@@ -92,13 +114,15 @@ function checkStatus() {
       const item = res.data;
       let statusBadge = item.status === "Approved" ? "status-approved" : (item.status === "Rejected" ? "status-rejected" : "status-pending");
       
+      let displayDate = formatDate(item.visitingDate);
+
       statusCard.innerHTML = `
         <h3 style="color:#2c3e50; margin-bottom:15px; text-align:center;">Appointment Details</h3>
         <div class="status-row"><strong>Reference ID:</strong> <span>${item.refId}</span></div>
         <div class="status-row"><strong>Name:</strong> <span>${item.name}</span></div>
         <div class="status-row"><strong>Service:</strong> <span>${item.service}</span></div>
         <div class="status-row"><strong>Status:</strong> <span class="${statusBadge}">${item.status}</span></div>
-        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${item.visitingDate}</span></div>
+        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${displayDate}</span></div>
       `;
     } else {
       statusCard.innerHTML = `<p style="color:#e74c3c; text-align:center; font-weight:bold;">❌ ${res.message}</p>`;
@@ -133,7 +157,6 @@ function loginAdmin() {
   });
 }
 
-// Convert DD/MM/YYYY to YYYY-MM-DD for input field
 function formatForInput(dateStr) {
   if(!dateStr || dateStr === "Not Scheduled Yet") return "";
   let parts = dateStr.split("/");
@@ -141,26 +164,32 @@ function formatForInput(dateStr) {
   return "";
 }
 
-// 4. DISPLAY ADMIN DATA TABLE
+// 4. DISPLAY ADMIN DATA TABLE (Updated with shifted columns)
 function showData(data) {
   if(data.length <= 1) {
     document.getElementById('tableContainer').innerHTML = "<p>No appointments found.</p>";
     return;
   }
   
-  let table = "<table><tr><th>Ref ID</th><th>Name</th><th>Phone</th><th>Address</th><th>Service</th><th>Status</th><th>Visiting Date</th><th>Action</th></tr>";
+  let table = "<table><tr><th>Ref ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Status</th><th>Visiting Date</th><th>Action</th></tr>";
   
   for(let i = data.length - 1; i >= 1; i--) {
     let refId = data[i][0] || "N/A";
-    let status = data[i][6] || "Pending";
-    let visitingDate = data[i][7] || "Not Scheduled Yet";
+    let name = data[i][1] || "N/A";
+    let phone = data[i][2] || "N/A";
+    let email = data[i][4] || "N/A";     // Column E (Index 4)
+    let service = data[i][5] || "N/A";   // Column F (Index 5)
+    let status = data[i][7] || "Pending"; // Column H (Index 7)
+    let rawDate = data[i][8] || "";       // Column I (Index 8)
     
     let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
-    let inputDateVal = formatForInput(visitingDate);
+
+    let displayDate = formatDate(rawDate);
+    let inputDateValue = formatForInput(rawDate); // Use the simple formatForInput for table
 
     let actionButtons = `
       <div style="margin-bottom:5px;">
-        <input type="date" id="dateInput_${i}" value="${inputDateVal}" class="admin-date-input" placeholder="Set Date">
+        <input type="date" id="dateInput_${i}" value="${inputDateValue}" class="admin-date-input" placeholder="Set Date">
       </div>
       <button class="btn-approve" onclick="updateAppointment(${i}, 'Approved')">Approve</button>
       <button class="btn-reject" onclick="updateAppointment(${i}, 'Rejected')">Reject</button>
@@ -168,12 +197,12 @@ function showData(data) {
 
     table += `<tr>
       <td><strong>${refId}</strong></td>
-      <td>${data[i][1]}</td>
-      <td>${data[i][2]}</td>
-      <td>${data[i][3]}</td>
-      <td>${data[i][4]}</td>
+      <td>${name}</td>
+      <td>${email}</td>
+      <td>${phone}</td>
+      <td>${service}</td>
       <td><span class="${statusClass}">${status}</span></td>
-      <td>${visitingDate}</td>
+      <td>${displayDate}</td>
       <td style="min-width: 140px;">${actionButtons}</td>
     </tr>`;
   }
@@ -183,10 +212,9 @@ function showData(data) {
 
 // 5. ADMIN UPDATE STATUS & DATE
 function updateAppointment(index, newStatus) {
-  const dateVal = document.getElementById(`dateInput_${index}`).value; // Format comes as YYYY-MM-DD
+  const dateVal = document.getElementById(`dateInput_${index}`).value;
   let visitingDateText = "Not Scheduled Yet";
   
-  // Convert YYYY-MM-DD back to DD/MM/YYYY for storing
   if(dateVal) {
     let parts = dateVal.split("-");
     if(parts.length === 3) {
