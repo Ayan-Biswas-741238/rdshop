@@ -74,6 +74,28 @@ function submitBooking() {
   });
 }
 
+// DATE FORMATTER HELPER (DD/MM/YYYY)
+function formatDate(dateString) {
+  if (!dateString || dateString === "Not Scheduled Yet") return "Not Scheduled Yet";
+  let d = new Date(dateString);
+  if (isNaN(d.getTime())) return dateString; 
+  let day = String(d.getDate()).padStart(2, '0');
+  let month = String(d.getMonth() + 1).padStart(2, '0');
+  let year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+// DATE FORMATTER FOR INPUT FIELD (YYYY-MM-DD)
+function formatDateForInput(dateString) {
+  if (!dateString || dateString === "Not Scheduled Yet") return "";
+  let d = new Date(dateString);
+  if (isNaN(d.getTime())) return ""; 
+  let day = String(d.getDate()).padStart(2, '0');
+  let month = String(d.getMonth() + 1).padStart(2, '0');
+  let year = d.getFullYear();
+  return `${year}-${month}-${day}`;
+}
+
 // 2. CHECK APPOINTMENT STATUS
 function checkStatus() {
   const refId = document.getElementById('refIdInput').value.trim();
@@ -94,13 +116,16 @@ function checkStatus() {
       const item = res.data;
       let statusBadge = item.status === "Approved" ? "status-approved" : (item.status === "Rejected" ? "status-rejected" : "status-pending");
       
+      // Date Formatting Applied Here
+      let displayDate = formatDate(item.visitingDate);
+
       statusCard.innerHTML = `
         <h3 style="color:#2c3e50; margin-bottom:15px; text-align:center;">Appointment Details</h3>
         <div class="status-row"><strong>Reference ID:</strong> <span>${item.refId}</span></div>
         <div class="status-row"><strong>Name:</strong> <span>${item.name}</span></div>
         <div class="status-row"><strong>Service:</strong> <span>${item.service}</span></div>
         <div class="status-row"><strong>Status:</strong> <span class="${statusBadge}">${item.status}</span></div>
-        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${item.visitingDate}</span></div>
+        <div class="status-row"><strong>Visiting Date:</strong> <span style="font-weight:bold; color:#2980b9;">${displayDate}</span></div>
       `;
     } else {
       statusCard.innerHTML = `<p style="color:#e74c3c; text-align:center; font-weight:bold;">❌ ${res.message}</p>`;
@@ -147,13 +172,17 @@ function showData(data) {
   for(let i = data.length - 1; i >= 1; i--) {
     let refId = data[i][0] || "N/A";
     let status = data[i][6] || "Pending";
-    let visitingDate = data[i][7] || "";
+    let rawDate = data[i][7] || "";
     
     let statusClass = status === "Approved" ? "status-approved" : (status === "Rejected" ? "status-rejected" : "status-pending");
 
+    // Date Formatting Applied Here for Table & Input field
+    let displayDate = formatDate(rawDate);
+    let inputDateValue = formatDateForInput(rawDate);
+
     let actionButtons = `
       <div style="margin-bottom:5px;">
-        <input type="date" id="dateInput_${i}" value="${visitingDate !== 'Not Scheduled Yet' ? visitingDate : ''}" class="admin-date-input" placeholder="Set Date">
+        <input type="date" id="dateInput_${i}" value="${inputDateValue}" class="admin-date-input" placeholder="Set Date">
       </div>
       <button class="btn-approve" onclick="updateAppointment(${i}, 'Approved')">Approve</button>
       <button class="btn-reject" onclick="updateAppointment(${i}, 'Rejected')">Reject</button>
@@ -166,7 +195,7 @@ function showData(data) {
       <td>${data[i][3]}</td>
       <td>${data[i][4]}</td>
       <td><span class="${statusClass}">${status}</span></td>
-      <td>${visitingDate}</td>
+      <td>${displayDate}</td>
       <td style="min-width: 140px;">${actionButtons}</td>
     </tr>`;
   }
